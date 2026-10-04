@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NutriPulse - Calorie & Nutrition Intelligence Tracker</title>
+  <meta name="description" content="Effortless speech & text calorie and comprehensive nutrition tracker with smart food parsing, daily analysis, and monthly reports.">
+  <!-- Tailwind CSS CDN for utility classes -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased flex flex-col min-h-screen">
+
+  <!-- Main App Header -->
+  <header class="app-header">
+    <div class="header-inner">
+      <!-- Brand Logo -->
+      <a href="#" id="brandHomeBtn" class="brand-logo">
+        <div class="brand-icon-wrapper">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+        </div>
+        <div>
+          <span class="text-lg font-extrabold tracking-tight text-slate-900 block leading-none">Nutri<span class="text-emerald-500">Pulse</span></span>
+          <span class="text-[11px] font-medium text-slate-400">Calorie & Nutrition Flow</span>
+        </div>
+      </a>
+
+      <!-- Navigation Tabs -->
+      <nav class="nav-tabs" id="navTabs">
+        <button class="nav-tab-btn active" data-tab="homeTab">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+          </svg>
+          <span class="tab-label">Home & Log</span>
+        </button>
+        <button class="nav-tab-btn" data-tab="analysisTab">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+          </svg>
+          <span class="tab-label">Daily Analysis</span>
+        </button>
+        <button class="nav-tab-btn" data-tab="monthlyTab">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+          <span class="tab-label">Monthly Report</span>
+        </button>
+      </nav>
+
+      <!-- Right Header Actions (Goals & Food Library) -->
+      <div class="flex items-center gap-2">
+        <button id="openLibraryBtn" class="btn-secondary !p-2 text-slate-600 rounded-xl" title="Browse Food Library">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+          </svg>
+        </button>
+        <button id="openGoalsBtn" class="btn-secondary !p-2 text-slate-600 rounded-xl" title="Daily Goals & Targets">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Layout -->
+  <main class="main-content">
+
+    <!-- ========================================================================= -->
+    <!-- SECTION 1: HOME TAB (Voice & Text Logging + Today's Live Dashboard) -->
+    <!-- ========================================================================= -->
+    <div id="homeTab" class="tab-pane active space-y-6">
+      
+      <!-- Voice & Text Logging Hero Banner -->
+      <section class="voice-hero-card">
+        <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+          <div class="space-y-2 max-w-xl">
+            <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-100/80 text-emerald-800 text-xs font-semibold">
+              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              Smart Speech & Natural Language Parser
+            </div>
+            <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+              What did you eat today?
+            </h1>
+            <p class="text-sm text-slate-600">
+              Speak or write naturally (e.g. <span class="italic text-slate-800 font-medium">"2 boiled eggs, 1 slice whole wheat bread with peanut butter and black coffee"</span>). NutriPulse automatically calculates calories and all nutrition components.
+            </p>
+          </div>
+
+          <!-- Microphone Big Action Button -->
+          <div class="flex flex-col items-center gap-2 self-center lg:self-auto">
+            <button id="voiceMicBtn" class="voice-record-btn group" title="Click to Speak">
+              <svg id="micIcon" class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+              </svg>
+            </button>
+            <span id="micStatusText" class="text-xs font-semibold text-slate-600">Tap to Speak</span>
+          </div>
+        </div>
+
+        <!-- Text Input & Parse Form -->
+        <div class="mt-6 pt-5 border-t border-emerald-100/80 space-y-3">
+          <div class="flex flex-col sm:flex-row gap-3">
+            <div class="relative flex-1">
+              <textarea
+                id="foodInputText"
+                rows="2"
+                class="text-area-input"
+                placeholder="Type or speak what you ate and how much (e.g., 2 rotis, 1 bowl dal, 1 cup rice for lunch)..."
+              ></textarea>
+              <button id="clearInputBtn" class="absolute right-3 top-3 text-slate-400 hover:text-slate-600 text-xs font-semibold hidden">
+                Clear
+              </button>
+            </div>
+            <div class="flex flex-col gap-2 sm:w-48">
+              <select id="mealTypeSelect" class="bg-white border border-slate-200 text-slate-700 text-sm rounded-xl p-2.5 font-medium focus:ring-emerald-500 focus:border-emerald-500">
+                <option value="auto">⚡ Auto-detect Meal</option>
+                <option value="breakfast">🌅 Breakfast</option>
+                <option value="lunch">☀️ Lunch</option>
+                <option value="dinner">🌙 Dinner</option>
+                <option value="snack">🍎 Snack</option>
+              </select>
+              <button id="parseFoodBtn" class="btn-primary w-full shadow-emerald-500/20">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+                <span>Parse & Add</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Quick Example Chips -->
+          <div class="flex flex-wrap items-center gap-2 pt-1">
+            <span class="text-xs font-semibold text-slate-400">Try quick example:</span>
+            <button class="chip example-chip" data-sample="2 boiled eggs and 1 slice of whole wheat toast for breakfast">
+              🥚 2 Boiled eggs & toast
+            </button>
+            <button class="chip example-chip" data-sample="150g grilled chicken breast with 1 cup white rice and mixed salad for lunch">
+              🍗 Chicken breast, rice & salad
+            </button>
+            <button class="chip example-chip" data-sample="1 bowl oatmeal, 1 banana, and 1 scoop protein shake">
+              🥣 Oatmeal, banana & protein
+            </button>
+            <button class="chip example-chip" data-sample="2 rotis, 1 bowl yellow dal, and 100g paneer for dinner">
+              🫓 Rotis, dal & paneer
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Parsed Candidates Confirmation / Preview Box (shown dynamically) -->
+      <section id="parsedReviewContainer" class="card border-emerald-200 bg-emerald-50/40 hidden">
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center gap-2">
+            <div class="w-7 h-7 rounded-lg bg-emerald-500 text-white flex items-center justify-center font-bold text-xs">
+              ✓
+            </div>
+            <h2 class="text-base font-bold text-slate-900">Review Parsed Nutrition Items</h2>
+          </div>
+          <span id="parsedMealBadge" class="badge-pill bg-emerald-100 text-emerald-800 font-bold uppercase">Breakfast</span>
+        </div>
+
+        <div id="parsedItemsList" class="space-y-3">
+          <!-- Dynamically filled with parsed item cards -->
+        </div>
+
+        <div class="mt-4 pt-3 border-t border-emerald-200 flex items-center justify-between">
+          <div class="text-sm font-semibold text-slate-700">
+            Total Parsed: <span id="parsedTotalCalories" class="font-bold text-emerald-600">0</span> kcal
+          </div>
+          <div class="flex gap-2">
+            <button id="cancelParsedBtn" class="btn-secondary text-xs !py-2">Cancel</button>
+            <button id="confirmAddLogBtn" class="btn-primary text-xs !py-2">
+              Add All to Today's Log
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Today's Live Dashboard Overview -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        <!-- Left: Calorie Ring Card -->
+        <div class="card flex flex-col items-center justify-center text-center p-6">
+          <div class="w-full flex items-center justify-between mb-4">
+            <h2 class="text-sm font-bold uppercase tracking-wider text-slate-400">Calories Today</h2>
+            <button id="changeDateFromHomeBtn" class="text-xs font-semibold text-emerald-600 hover:underline">
+              <span id="todayDateLabel">Today</span>
+            </button>
+          </div>
+          <div id="homeCalorieRingContainer" class="my-2">
+            <!-- Calorie Ring rendered here -->
+          </div>
+          <div class="w-full grid grid-cols-2 gap-3 mt-4 pt-4 border-t border-slate-100 text-center">
+            <div>
+              <span class="text-xs text-slate-400 block font-medium">Daily Goal</span>
+              <span id="homeCalorieGoalText" class="text-sm font-bold text-slate-700">2000 kcal</span>
+            </div>
+            <div>
+              <span class="text-xs text-slate-400 block font-medium">Burned / Deficit</span>
+              <span id="homeDeficitText" class="text-sm font-bold text-emerald-600">-</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Middle: Macros Breakdown Card -->
+        <div class="card p-6 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <h2 class="text-sm font-bold uppercase tracking-wider text-slate-400">Macronutrients</h2>
+              <span class="text-xs font-semibold text-slate-500">Grams Consumed</span>
+            </div>
+            <div class="space-y-3.5">
+              <!-- Protein -->
+              <div>
+                <div class="flex justify-between text-xs font-bold mb-1">
+                  <span class="text-blue-600">Protein</span>
+                  <span id="homeProteinText" class="text-slate-800">0g / 130g</span>
+                </div>
+                <div class="nutrient-bar-track">
+                  <div id="homeProteinBar" class="nutrient-bar-fill bg-blue-500" style="width: 0%"></div>
+                </div>
+              </div>
+              <!-- Carbs -->
+              <div>
+                <div class="flex justify-between text-xs font-bold mb-1">
+                  <span class="text-amber-600">Carbohydrates</span>
+                  <span id="homeCarbsText" class="text-slate-800">0g / 220g</span>
+                </div>
+                <div class="nutrient-bar-track">
+                  <div id="homeCarbsBar" class="nutrient-bar-fill bg-amber-500" style="width: 0%"></div>
+                </div>
+              </div>
+              <!-- Fats -->
+              <div>
+                <div class="flex justify-between text-xs font-bold mb-1">
+                  <span class="text-pink-600">Fats</span>
+                  <span id="homeFatText" class="text-slate-800">0g / 65g</span>
+                </div>
+                <div class="nutrient-bar-track">
+                  <div id="homeFatBar" class="nutrient-bar-fill bg-pink-500" style="width: 0%"></div>
+                </div>
+              </div>
+              <!-- Fiber -->
+              <div>
+                <div class="flex justify-between text-xs font-bold mb-1">
+                  <span class="text-emerald-600">Dietary Fiber</span>
+                  <span id="homeFiberText" class="text-slate-800">0g / 30g</span>
+                </div>
+                <div class="nutrient-bar-track">
+                  <div id="homeFiberBar" class="nutrient-bar-fill bg-emerald-500" style="width: 0%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+            <span>Macro Calorie Split:</span>
+            <span id="homeMacroRatio" class="font-semibold text-slate-700">0% P / 0% C / 0% F</span>
+          </div>
+        </div>
+
+        <!-- Right: Hydration & Quick Actions -->
+        <div class="card p-6 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <h2 class="text-sm font-bold uppercase tracking-wider text-slate-400">Hydration</h2>
+              <span id="waterCountText" class="text-xs font-bold text-sky-600">0 / 2500 ml</span>
+            </div>
+            <div class="flex items-center gap-3 my-2">
+              <div class="w-12 h-12 rounded-2xl bg-sky-50 text-sky-500 flex items-center justify-center">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                </svg>
+              </div>
+              <div class="flex-1">
+                <div class="nutrient-bar-track">
+                  <div id="waterProgressBar" class="nutrient-bar-fill bg-sky-500" style="width: 0%"></div>
+                </div>
+              </div>
+            </div>
+            <div class="flex items-center gap-2 mt-3">
+              <button id="addWaterGlassBtn" class="flex-1 py-1.5 px-2 bg-sky-50 hover:bg-sky-100 text-sky-700 text-xs font-bold rounded-lg border border-sky-200 transition-colors">
+                + 1 Glass (250ml)
+              </button>
+              <button id="addWaterBottleBtn" class="flex-1 py-1.5 px-2 bg-sky-50 hover:bg-sky-100 text-sky-700 text-xs font-bold rounded-lg border border-sky-200 transition-colors">
+                + 1 Bottle (500ml)
+              </button>
+              <button id="resetWaterBtn" class="p-1.5 text-slate-400 hover:text-red-500 rounded-lg" title="Reset Water">
+                ↺
+              </button>
+            </div>
+          </div>
+
+          <!-- Deep Analysis CTA -->
+          <div class="mt-4 pt-3 border-t border-slate-100">
+            <button id="goToAnalysisFromHomeBtn" class="w-full flex items-center justify-between text-xs font-semibold text-emerald-600 hover:text-emerald-700 p-2 rounded-xl bg-emerald-50 hover:bg-emerald-100/70 transition-colors">
+              <span>View In-Depth Daily Nutrition Analysis</span>
+              <span>→</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Today's Logged Meals Breakdown Timeline -->
+      <section class="card">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-6 pb-4 border-b border-slate-100">
+          <div>
+            <h2 class="text-lg font-bold text-slate-900">Today's Food Journal</h2>
+            <p class="text-xs text-slate-500">Categorized meal logs with individual nutritional component breakdown</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button id="quickAddCustomFoodBtn" class="btn-secondary !py-1.5 !px-3 text-xs">
+              + Custom Food
+            </button>
+            <button id="clearTodayLogsBtn" class="btn-secondary !py-1.5 !px-3 text-xs text-red-600 hover:bg-red-50 border-red-200">
+              Clear All
+            </button>
+          </div>
+        </div>
+
+        <!-- Meals Sections: Breakfast, Lunch, Dinner, Snacks -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="todayMealsContainer">
+          <!-- Breakfast Card -->
+          <div class="p-4 rounded-2xl border border-slate-200 bg-slate-50/50 flex flex-col justify-between" id="mealCard-breakfast">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <div class="flex items-center gap-2">
+                  <span class="text-base">🌅</span>
+                  <h3 class="text-sm font-bold text-slate-800">Breakfast</h3>
+                </div>
+                <span class="text-xs font-bold text-slate-500" id="mealCal-breakfast">0 kcal</span>
+              </div>
+              <div class="space-y-2" id="mealItems-breakfast">
+                <p class="text-xs text-slate-400 italic">No food logged for breakfast</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Lunch Card -->
+          <div class="p-4 rounded-2xl border border-slate-200 bg-slate-50/50 flex flex-col justify-between" id="mealCard-lunch">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <div class="flex items-center gap-2">
+                  <span class="text-base">☀️</span>
+                  <h3 class="text-sm font-bold text-slate-800">Lunch</h3>
+                </div>
+                <span class="text-xs font-bold text-slate-500" id="mealCal-lunch">0 kcal</span>
+              </div>
+              <div class="space-y-2" id="mealItems-lunch">
+                <p class="text-xs text-slate-400 italic">No food logged for lunch</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dinner Card -->
+          <div class="p-4 rounded-2xl border border-slate-200 bg-slate-50/50 flex flex-col justify-between" id="mealCard-dinner">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <div class="flex items-center gap-2">
+                  <span class="text-base">🌙</span>
+                  <h3 class="text-sm font-bold text-slate-800">Dinner</h3>
+                </div>
+                <span class="text-xs font-bold text-slate-500" id="mealCal-dinner">0 kcal</span>
+              </div>
+              <div class="space-y-2" id="mealItems-dinner">
+                <p class="text-xs text-slate-400 italic">No food logged for dinner</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Snacks Card -->
+          <div class="p-4 rounded-2xl border border-slate-200 bg-slate-50/50 flex flex-col justify-between" id="mealCard-snack">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <div class="flex items-center gap-2">
+                  <span class="text-base">🍎</span>
+                  <h3 class="text-sm font-bold text-slate-800">Snacks & Drinks</h3>
+                </div>
+                <span class="text-xs font-bold text-slate-500" id="mealCal-snack">0 kcal</span>
+              </div>
+              <div class="space-y-2" id="mealItems-snack">
+                <p class="text-xs text-slate-400 italic">No snacks logged</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+
+    <!-- ========================================================================= -->
+    <!-- SECTION 2: DAILY ANALYSIS TAB (Deep Nutrition Component Breakdown) -->
+    <!-- ========================================================================= -->
+    <div id="analysisTab" class="tab-pane hidden space-y-6">
+      
+      <!-- Date Navigator Banner -->
+      <div class="card bg-white p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="flex items-center gap-2">
+          <button id="prevDayBtn" class="btn-secondary !p-2 text-slate-600 rounded-xl" title="Previous Day">
+            ←
+          </button>
+          <div class="flex items-center gap-2">
+            <input
+              type="date"
+              id="analysisDateInput"
+              class="bg-slate-50 border border-slate-200 text-slate-800 text-sm font-semibold rounded-xl px-3 py-2 focus:ring-emerald-500"
+            />
+            <button id="todayJumpBtn" class="btn-secondary !py-2 !px-3 text-xs font-semibold text-emerald-700 bg-emerald-50 border-emerald-200">
+              Today
+            </button>
+          </div>
+          <button id="nextDayBtn" class="btn-secondary !p-2 text-slate-600 rounded-xl" title="Next Day">
+            →
+          </button>
+        </div>
+
+        <!-- Nutrition Quality Score Badge -->
+        <div class="flex items-center gap-3">
+          <div class="text-right">
+            <span class="text-xs text-slate-400 block font-medium">Diet Quality Score</span>
+            <span id="nutritionQualityLabel" class="text-sm font-bold text-emerald-600">Excellent (94/100)</span>
+          </div>
+          <div id="nutritionQualityBadge" class="w-11 h-11 rounded-2xl bg-emerald-100 text-emerald-700 font-extrabold text-lg flex items-center justify-center">
+            A
+          </div>
+        </div>
+      </div>
+
+      <!-- Macro & Calorie Overview Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        <!-- Macro Donut Chart -->
+        <div class="card p-6 flex flex-col justify-center">
+          <h2 class="text-sm font-bold uppercase tracking-wider text-slate-400 mb-4 text-center">
+            Macronutrient Ratio Split
+          </h2>
+          <div id="analysisMacroDonutContainer">
+            <!-- Rendered by charts.js -->
+          </div>
+        </div>
+
+        <!-- Energy & Calorie Balance -->
+        <div class="card p-6 space-y-4">
+          <h2 class="text-sm font-bold uppercase tracking-wider text-slate-400">Energy & Balance</h2>
+          
+          <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-between">
+            <div>
+              <span class="text-xs text-slate-400 font-medium block">Total Calories</span>
+              <span id="analysisTotalCal" class="text-2xl font-extrabold text-slate-900">0</span>
+              <span class="text-xs text-slate-500 font-semibold"> / <span id="analysisGoalCal">2000</span> kcal</span>
+            </div>
+            <div class="text-right">
+              <span class="text-xs text-slate-400 font-medium block">Net Balance</span>
+              <span id="analysisBalanceText" class="text-sm font-bold text-emerald-600">Within Target</span>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div class="p-3 rounded-xl bg-blue-50/60 border border-blue-100">
+              <span class="text-xs text-blue-600 font-semibold block">Protein Calories</span>
+              <span id="proteinCalText" class="text-base font-bold text-slate-800">0 kcal</span>
+              <span id="proteinPctText" class="text-[11px] text-slate-500 block">0% of total</span>
+            </div>
+            <div class="p-3 rounded-xl bg-amber-50/60 border border-amber-100">
+              <span class="text-xs text-amber-600 font-semibold block">Carbs Calories</span>
+              <span id="carbsCalText" class="text-base font-bold text-slate-800">0 kcal</span>
+              <span id="carbsPctText" class="text-[11px] text-slate-500 block">0% of total</span>
+            </div>
+            <div class="p-3 rounded-xl bg-pink-50/60 border border-pink-100">
+              <span class="text-xs text-pink-600 font-semibold block">Fat Calories</span>
+              <span id="fatCalText" class="text-base font-bold text-slate-800">0 kcal</span>
+              <span id="fatPctText" class="text-[11px] text-slate-500 block">0% of total</span>
+            </div>
+            <div class="p-3 rounded-xl bg-purple-50/60 border border-purple-100">
+              <span class="text-xs text-purple-600 font-semibold block">Meals Logged</span>
+              <span id="totalItemsLoggedCount" class="text-base font-bold text-slate-800">0 items</span>
+              <span class="text-[11px] text-slate-500 block">across day</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Meal Distribution Summary -->
+        <div class="card p-6 space-y-4">
+          <h2 class="text-sm font-bold uppercase tracking-wider text-slate-400">Meal-by-Meal Calories</h2>
+          <div class="space-y-3">
+            <div>
+              <div class="flex justify-between text-xs font-semibold mb-1">
+                <span>🌅 Breakfast</span>
+                <span id="analysisBreakCal">0 kcal (0%)</span>
+              </div>
+              <div class="nutrient-bar-track">
+                <div id="analysisBreakBar" class="nutrient-bar-fill bg-amber-400" style="width: 0%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between text-xs font-semibold mb-1">
+                <span>☀️ Lunch</span>
+                <span id="analysisLunchCal">0 kcal (0%)</span>
+              </div>
+              <div class="nutrient-bar-track">
+                <div id="analysisLunchBar" class="nutrient-bar-fill bg-emerald-500" style="width: 0%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between text-xs font-semibold mb-1">
+                <span>🌙 Dinner</span>
+                <span id="analysisDinnerCal">0 kcal (0%)</span>
+              </div>
+              <div class="nutrient-bar-track">
+                <div id="analysisDinnerBar" class="nutrient-bar-fill bg-indigo-500" style="width: 0%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between text-xs font-semibold mb-1">
+                <span>🍎 Snacks</span>
+                <span id="analysisSnackCal">0 kcal (0%)</span>
+              </div>
+              <div class="nutrient-bar-track">
+                <div id="analysisSnackBar" class="nutrient-bar-fill bg-pink-400" style="width: 0%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Deep Component Breakdown Cards (Fiber, Sugars, Sodium, Potassium, Calcium, Iron, Vitamins) -->
+      <section class="card space-y-5">
+        <div>
+          <h2 class="text-lg font-bold text-slate-900">Specific Nutritional Components Breakdown</h2>
+          <p class="text-xs text-slate-500">Detailed micronutrient and component tracking vs recommended daily intake (RDA)</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          
+          <!-- Dietary Fiber -->
+          <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-bold text-slate-700">🌾 Dietary Fiber</span>
+              <span id="compFiberVal" class="text-xs font-extrabold text-emerald-600">0g / 30g</span>
+            </div>
+            <div class="nutrient-bar-track mb-2">
+              <div id="compFiberBar" class="nutrient-bar-fill bg-emerald-500" style="width: 0%"></div>
+            </div>
+            <span id="compFiberStatus" class="text-[11px] text-slate-500">Aids digestion and glucose control</span>
+          </div>
+
+          <!-- Total Sugars -->
+          <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-bold text-slate-700">🍬 Total Sugars</span>
+              <span id="compSugarVal" class="text-xs font-extrabold text-amber-600">0g / 50g cap</span>
+            </div>
+            <div class="nutrient-bar-track mb-2">
+              <div id="compSugarBar" class="nutrient-bar-fill bg-amber-500" style="width: 0%"></div>
+            </div>
+            <span id="compSugarStatus" class="text-[11px] text-slate-500">Keep low for metabolic health</span>
+          </div>
+
+          <!-- Sodium -->
+          <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-bold text-slate-700">🧂 Sodium</span>
+              <span id="compSodiumVal" class="text-xs font-extrabold text-rose-600">0mg / 2300mg cap</span>
+            </div>
+            <div class="nutrient-bar-track mb-2">
+              <div id="compSodiumBar" class="nutrient-bar-fill bg-rose-500" style="width: 0%"></div>
+            </div>
+            <span id="compSodiumStatus" class="text-[11px] text-slate-500">Blood pressure management</span>
+          </div>
+
+          <!-- Potassium -->
+          <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-bold text-slate-700">🍌 Potassium</span>
+              <span id="compPotassiumVal" class="text-xs font-extrabold text-blue-600">0mg / 3400mg</span>
+            </div>
+            <div class="nutrient-bar-track mb-2">
+              <div id="compPotassiumBar" class="nutrient-bar-fill bg-blue-500" style="width: 0%"></div>
+            </div>
+            <span class="text-[11px] text-slate-500">Muscle function & fluid balance</span>
+          </div>
+
+          <!-- Calcium -->
+          <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-bold text-slate-700">🥛 Calcium</span>
+              <span id="compCalciumVal" class="text-xs font-extrabold text-sky-600">0mg / 1000mg</span>
+            </div>
+            <div class="nutrient-bar-track mb-2">
+              <div id="compCalciumBar" class="nutrient-bar-fill bg-sky-500" style="width: 0%"></div>
+            </div>
+            <span class="text-[11px] text-slate-500">Bone density & nerve transmission</span>
+          </div>
+
+          <!-- Iron -->
+          <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-bold text-slate-700">🥩 Iron</span>
+              <span id="compIronVal" class="text-xs font-extrabold text-purple-600">0mg / 18mg</span>
+            </div>
+            <div class="nutrient-bar-track mb-2">
+              <div id="compIronBar" class="nutrient-bar-fill bg-purple-500" style="width: 0%"></div>
+            </div>
+            <span class="text-[11px] text-slate-500">Oxygen transport & vitality</span>
+          </div>
+
+          <!-- Vitamin C -->
+          <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-bold text-slate-700">🍊 Vitamin C</span>
+              <span id="compVitCVal" class="text-xs font-extrabold text-orange-600">0mg / 90mg</span>
+            </div>
+            <div class="nutrient-bar-track mb-2">
+              <div id="compVitCBar" class="nutrient-bar-fill bg-orange-500" style="width: 0%"></div>
+            </div>
+            <span class="text-[11px] text-slate-500">Immunity & collagen synthesis</span>
+          </div>
+
+          <!-- Vitamin A -->
+          <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-bold text-slate-700">🥕 Vitamin A</span>
+              <span id="compVitAVal" class="text-xs font-extrabold text-amber-700">0 IU / 3000 IU</span>
+            </div>
+            <div class="nutrient-bar-track mb-2">
+              <div id="compVitABar" class="nutrient-bar-fill bg-amber-600" style="width: 0%"></div>
+            </div>
+            <span class="text-[11px] text-slate-500">Eye health & cellular repair</span>
+          </div>
+
+          <!-- Serving Mass -->
+          <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-bold text-slate-700">⚖️ Total Food Weight</span>
+              <span id="compWeightVal" class="text-xs font-extrabold text-slate-700">0 g</span>
+            </div>
+            <div class="nutrient-bar-track mb-2">
+              <div class="nutrient-bar-fill bg-slate-400" style="width: 60%"></div>
+            </div>
+            <span class="text-[11px] text-slate-500">Estimated cumulative food intake</span>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Detailed Food Items Table for the Day -->
+      <section class="card">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-base font-bold text-slate-900">All Logged Food Items for this Day</h2>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs border-collapse">
+            <thead>
+              <tr class="border-b border-slate-200 text-slate-400 uppercase font-semibold">
+                <th class="py-2.5 px-3">Food & Portion</th>
+                <th class="py-2.5 px-3">Meal</th>
+                <th class="py-2.5 px-3 text-right">Calories</th>
+                <th class="py-2.5 px-3 text-right">Protein</th>
+                <th class="py-2.5 px-3 text-right">Carbs</th>
+                <th class="py-2.5 px-3 text-right">Fats</th>
+                <th class="py-2.5 px-3 text-right">Fiber</th>
+                <th class="py-2.5 px-3 text-right">Sodium</th>
+              </tr>
+            </thead>
+            <tbody id="analysisTableBody" class="divide-y divide-slate-100 text-slate-700 font-medium">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </div>
+
+
+    <!-- ========================================================================= -->
+    <!-- SECTION 3: MONTHLY REPORT TAB & SPECIFIC DATE INSPECTOR -->
+    <!-- ========================================================================= -->
+    <div id="monthlyTab" class="tab-pane hidden space-y-6">
+      
+      <!-- Month Selection & Summary Bar -->
+      <div class="card p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <button id="prevMonthBtn" class="btn-secondary !p-2 text-slate-600 rounded-xl" title="Previous Month">
+            ←
+          </button>
+          <div class="flex items-center gap-2">
+            <input
+              type="month"
+              id="monthlyPickerInput"
+              class="bg-slate-50 border border-slate-200 text-slate-900 text-base font-bold rounded-xl px-3 py-1.5 focus:ring-emerald-500"
+            />
+          </div>
+          <button id="nextMonthBtn" class="btn-secondary !p-2 text-slate-600 rounded-xl" title="Next Month">
+            →
+          </button>
+        </div>
+
+        <!-- Quick Demo Data & Export Action Buttons -->
+        <div class="flex flex-wrap items-center gap-2">
+          <button id="preloadDemoDataBtn" class="btn-secondary text-xs !py-2 !px-3 text-emerald-700 bg-emerald-50 border-emerald-200">
+            📊 Load Sample Month Data
+          </button>
+          <button id="exportCsvBtn" class="btn-secondary text-xs !py-2 !px-3">
+            📥 Export CSV
+          </button>
+        </div>
+      </div>
+
+      <!-- Monthly Key Metrics KPIs -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        
+        <div class="card p-4">
+          <span class="text-xs font-semibold text-slate-400 block">Avg Daily Calories</span>
+          <span id="monthAvgCal" class="text-2xl font-extrabold text-slate-900 block mt-1">0 kcal</span>
+          <span id="monthCalDelta" class="text-xs font-medium text-emerald-600 mt-1 block">vs goal target</span>
+        </div>
+
+        <div class="card p-4">
+          <span class="text-xs font-semibold text-slate-400 block">Days Tracked</span>
+          <span id="monthDaysTracked" class="text-2xl font-extrabold text-slate-900 block mt-1">0 days</span>
+          <span id="monthAdherence" class="text-xs font-medium text-blue-600 mt-1 block">0% monthly consistency</span>
+        </div>
+
+        <div class="card p-4">
+          <span class="text-xs font-semibold text-slate-400 block">Avg Daily Protein</span>
+          <span id="monthAvgProtein" class="text-2xl font-extrabold text-blue-600 block mt-1">0g</span>
+          <span class="text-xs font-medium text-slate-400 mt-1 block">per tracked day</span>
+        </div>
+
+        <div class="card p-4">
+          <span class="text-xs font-semibold text-slate-400 block">Goal Adherence</span>
+          <span id="monthGoalHitPct" class="text-2xl font-extrabold text-emerald-600 block mt-1">0%</span>
+          <span class="text-xs font-medium text-slate-400 mt-1 block">within ±10% target</span>
+        </div>
+
+      </div>
+
+      <!-- Monthly Trend Chart -->
+      <section class="card p-6">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h2 class="text-base font-bold text-slate-900">Daily Calorie Trend & Goal Compliance</h2>
+            <p class="text-xs text-slate-500">Click any day's bar to jump to its deep daily analysis</p>
+          </div>
+          <div class="flex items-center gap-3 text-xs font-semibold">
+            <span class="inline-flex items-center gap-1 text-emerald-600">
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> On Target
+            </span>
+            <span class="inline-flex items-center gap-1 text-red-500">
+              <span class="w-2.5 h-2.5 rounded-full bg-red-400"></span> Over Goal
+            </span>
+          </div>
+        </div>
+        <div id="monthlyTrendChartContainer">
+          <!-- Rendered by charts.js -->
+        </div>
+      </section>
+
+      <!-- Interactive Monthly Calendar Grid with Specific Date Explorer -->
+      <section class="card p-6">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-6">
+          <div>
+            <h2 class="text-base font-bold text-slate-900">Monthly Calendar Overview</h2>
+            <p class="text-xs text-slate-500">Select any specific date on the calendar to view its complete meal logs & nutrition</p>
+          </div>
+          
+          <!-- Specific Date Direct Search Input -->
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-semibold text-slate-500">Check specific date:</span>
+            <input
+              type="date"
+              id="specificDateDirectPicker"
+              class="bg-slate-50 border border-slate-200 text-slate-800 text-xs font-semibold rounded-lg px-2.5 py-1.5 focus:ring-emerald-500"
+            />
+          </div>
+        </div>
+
+        <!-- Weekday Labels -->
+        <div class="grid grid-cols-7 gap-1 text-center text-xs font-bold text-slate-400 mb-2">
+          <div>SUN</div>
+          <div>MON</div>
+          <div>TUE</div>
+          <div>WED</div>
+          <div>THU</div>
+          <div>FRI</div>
+          <div>SAT</div>
+        </div>
+
+        <!-- Calendar Days Grid Container -->
+        <div id="monthlyCalendarGrid" class="calendar-grid">
+          <!-- Dynamically filled with calendar cells -->
+        </div>
+      </section>
+
+      <!-- Top Consumed Foods of the Month -->
+      <section class="card p-6">
+        <h2 class="text-base font-bold text-slate-900 mb-3">Top Consumed Foods this Month</h2>
+        <div id="monthTopFoodsList" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          <!-- Dynamically populated -->
+        </div>
+      </section>
+
+    </div>
+
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL: GOALS & PROFILE SETTINGS -->
+  <!-- ========================================================================= -->
+  <div id="goalsModal" class="modal-backdrop">
+    <div class="modal-card">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
+        <h3 class="text-lg font-bold text-slate-900">Custom Daily Targets & Goals</h3>
+        <button id="closeGoalsModalBtn" class="text-slate-400 hover:text-slate-600 text-lg font-bold">✕</button>
+      </div>
+
+      <form id="goalsForm" class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Daily Calorie Target (kcal)</label>
+          <input type="number" id="goalCaloriesInput" min="800" max="8000" class="w-full text-sm border border-slate-200 rounded-xl p-2.5 font-semibold focus:ring-emerald-500" required>
+        </div>
+
+        <div class="grid grid-cols-3 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-blue-600 mb-1">Protein (g)</label>
+            <input type="number" id="goalProteinInput" min="10" max="500" class="w-full text-sm border border-slate-200 rounded-xl p-2.5 font-semibold" required>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-amber-600 mb-1">Carbs (g)</label>
+            <input type="number" id="goalCarbsInput" min="10" max="800" class="w-full text-sm border border-slate-200 rounded-xl p-2.5 font-semibold" required>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-pink-600 mb-1">Fats (g)</label>
+            <input type="number" id="goalFatInput" min="5" max="300" class="w-full text-sm border border-slate-200 rounded-xl p-2.5 font-semibold" required>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-emerald-600 mb-1">Dietary Fiber (g)</label>
+            <input type="number" id="goalFiberInput" min="5" max="100" class="w-full text-sm border border-slate-200 rounded-xl p-2.5 font-semibold" required>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-sky-600 mb-1">Water Target (ml)</label>
+            <input type="number" id="goalWaterInput" step="100" min="500" max="6000" class="w-full text-sm border border-slate-200 rounded-xl p-2.5 font-semibold" required>
+          </div>
+        </div>
+
+        <div class="pt-3 border-t border-slate-100 flex justify-end gap-2">
+          <button type="button" id="cancelGoalsBtn" class="btn-secondary text-xs !py-2">Cancel</button>
+          <button type="submit" class="btn-primary text-xs !py-2">Save Targets</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL: FOOD LIBRARY & SEARCH -->
+  <!-- ========================================================================= -->
+  <div id="libraryModal" class="modal-backdrop">
+    <div class="modal-card !max-w-2xl">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
+        <h3 class="text-lg font-bold text-slate-900">Food Nutrition Library</h3>
+        <button id="closeLibraryModalBtn" class="text-slate-400 hover:text-slate-600 text-lg font-bold">✕</button>
+      </div>
+
+      <div class="space-y-4">
+        <div class="flex items-center gap-2">
+          <input
+            type="text"
+            id="librarySearchInput"
+            placeholder="Search foods (e.g., egg, chicken, oats, apple, paneer, roti)..."
+            class="w-full text-sm border border-slate-200 rounded-xl p-2.5 font-medium"
+          />
+        </div>
+
+        <!-- Food Category Filter Pills -->
+        <div class="flex flex-wrap gap-1.5" id="libraryCategoryPills">
+          <button class="chip active bg-emerald-100 text-emerald-800" data-cat="all">All Foods</button>
+          <button class="chip" data-cat="protein">Proteins</button>
+          <button class="chip" data-cat="carbs">Grains & Carbs</button>
+          <button class="chip" data-cat="fruits">Fruits</button>
+          <button class="chip" data-cat="vegetables">Vegetables</button>
+          <button class="chip" data-cat="dairy">Dairy</button>
+          <button class="chip" data-cat="meals">Meals & Dishes</button>
+          <button class="chip" data-cat="snacks">Snacks</button>
+        </div>
+
+        <!-- Food Items Grid -->
+        <div id="libraryItemsContainer" class="max-h-[380px] overflow-y-auto space-y-2 pr-1">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL: CUSTOM FOOD CREATOR -->
+  <!-- ========================================================================= -->
+  <div id="customFoodModal" class="modal-backdrop">
+    <div class="modal-card">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
+        <h3 class="text-lg font-bold text-slate-900">Add Custom Food Item</h3>
+        <button id="closeCustomFoodModalBtn" class="text-slate-400 hover:text-slate-600 text-lg font-bold">✕</button>
+      </div>
+
+      <form id="customFoodForm" class="space-y-3">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Food Name</label>
+          <input type="text" id="customNameInput" placeholder="e.g. Grandma's Oatmeal Cookie" class="w-full text-sm border border-slate-200 rounded-xl p-2 font-medium" required>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Default Serving Unit</label>
+            <input type="text" id="customUnitInput" placeholder="piece / cup / 100g" class="w-full text-sm border border-slate-200 rounded-xl p-2 font-medium" required>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Calories (kcal)</label>
+            <input type="number" id="customCalInput" min="0" max="3000" class="w-full text-sm border border-slate-200 rounded-xl p-2 font-semibold" required>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-3 gap-2">
+          <div>
+            <label class="block text-xs font-bold text-blue-600 mb-1">Protein (g)</label>
+            <input type="number" step="0.1" id="customProteinInput" min="0" class="w-full text-xs border border-slate-200 rounded-xl p-2 font-medium" required>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-amber-600 mb-1">Carbs (g)</label>
+            <input type="number" step="0.1" id="customCarbsInput" min="0" class="w-full text-xs border border-slate-200 rounded-xl p-2 font-medium" required>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-pink-600 mb-1">Fats (g)</label>
+            <input type="number" step="0.1" id="customFatInput" min="0" class="w-full text-xs border border-slate-200 rounded-xl p-2 font-medium" required>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block text-xs font-bold text-emerald-600 mb-1">Fiber (g)</label>
+            <input type="number" step="0.1" id="customFiberInput" min="0" value="0" class="w-full text-xs border border-slate-200 rounded-xl p-2 font-medium">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-rose-600 mb-1">Sodium (mg)</label>
+            <input type="number" id="customSodiumInput" min="0" value="0" class="w-full text-xs border border-slate-200 rounded-xl p-2 font-medium">
+          </div>
+        </div>
+
+        <div class="pt-3 border-t border-slate-100 flex justify-end gap-2">
+          <button type="button" id="cancelCustomFoodBtn" class="btn-secondary text-xs !py-2">Cancel</button>
+          <button type="submit" class="btn-primary text-xs !py-2">Save to Database</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toastNotification" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+    <div class="bg-slate-900 text-white text-xs font-semibold px-4 py-3 rounded-2xl shadow-xl flex items-center gap-2.5">
+      <span id="toastIcon">✨</span>
+      <span id="toastMessage">Food logged successfully!</span>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script type="module" src="app.js"></script>
+</body>
+</html>
