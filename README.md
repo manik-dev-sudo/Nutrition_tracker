@@ -1,4 +1,4 @@
-# NutriPulse
+# Health Diary
 
 A simple calorie and nutrition tracker designed to make logging meals effortless. Instead of searching and adding ingredients one by one, you can just speak or type what you ate in plain language (e.g., *"2 boiled eggs, a slice of whole wheat toast with peanut butter, and a cup of black coffee"*), and the app calculates the calories and nutrition breakdown for you.
 

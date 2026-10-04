@@ -4,10 +4,10 @@ import { FOOD_DATABASE } from './nutritionData.js';
 
 // --- STATE MANAGEMENT ---
 const STORAGE_KEYS = {
-  LOGS: 'nutripulse_logs',
-  WATER: 'nutripulse_water',
-  GOALS: 'nutripulse_goals',
-  CUSTOM_FOODS: 'nutripulse_custom_foods'
+  LOGS: 'health_diary_logs',
+  WATER: 'health_diary_water',
+  GOALS: 'health_diary_goals',
+  CUSTOM_FOODS: 'health_diary_custom_foods'
 };
 
 const DEFAULT_GOALS = {
@@ -38,7 +38,7 @@ let parsedReviewMeal = 'breakfast';
 
 // --- DATA ACCESSORS ---
 function loadGoals() {
-  const saved = localStorage.getItem(STORAGE_KEYS.GOALS);
+  const saved = localStorage.getItem(STORAGE_KEYS.GOALS) || localStorage.getItem('nutripulse_goals');
   return saved ? { ...DEFAULT_GOALS, ...JSON.parse(saved) } : { ...DEFAULT_GOALS };
 }
 
@@ -48,7 +48,7 @@ function saveGoals(goals) {
 }
 
 function loadCustomFoods() {
-  const saved = localStorage.getItem(STORAGE_KEYS.CUSTOM_FOODS);
+  const saved = localStorage.getItem(STORAGE_KEYS.CUSTOM_FOODS) || localStorage.getItem('nutripulse_custom_foods');
   return saved ? JSON.parse(saved) : [];
 }
 
@@ -58,7 +58,7 @@ function saveCustomFood(food) {
 }
 
 function getAllLogs() {
-  const saved = localStorage.getItem(STORAGE_KEYS.LOGS);
+  const saved = localStorage.getItem(STORAGE_KEYS.LOGS) || localStorage.getItem('nutripulse_logs');
   return saved ? JSON.parse(saved) : {};
 }
 
@@ -74,7 +74,7 @@ function saveLogsForDate(dateStr, items) {
 }
 
 function getWaterForDate(dateStr) {
-  const water = JSON.parse(localStorage.getItem(STORAGE_KEYS.WATER) || '{}');
+  const water = JSON.parse(localStorage.getItem(STORAGE_KEYS.WATER) || localStorage.getItem('nutripulse_water') || '{}');
   return water[dateStr] || 0;
 }
 
@@ -1074,7 +1074,7 @@ function exportMonthToCSV() {
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = `nutripulse_report_${selectedMonth}.csv`;
+  a.download = `health_diary_report_${selectedMonth}.csv`;
   a.click();
   URL.revokeObjectURL(url);
   showToast("Monthly CSV report downloaded!", "📥");
